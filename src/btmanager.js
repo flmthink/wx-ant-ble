@@ -40,7 +40,7 @@ export class BTManager {
    *   @property {number} interval            上报新设备的间隔，默认为0
    *   @property {number} timeout             扫描超时时间，毫秒。在该时间内未扫描到符合要求的设备，上报超时。默认15000ms，-1表示无限超时
    *   @property {string} deviceName          通过蓝牙名称过滤，需要匹配的设备名称
-   *   @property {string} containName         通过蓝牙名称过滤，需要包含的设备名称
+   *   @property {array string} containName         通过蓝牙名称过滤，需要包含的设备名称
    * 
    *  @return Promise对象
    * 
@@ -50,15 +50,14 @@ export class BTManager {
    * 
    *  @see registerDidDiscoverDevice
    */
-  scan( options = { 
-          services: [],
-          allowDuplicatesKey: false,
-          interval : 0,
-          timeout: 15000,
-          deviceName: '', 
-          containName:''
-      }) 
-  {
+  scan (options = {
+    services: [],
+    allowDuplicatesKey: false,
+    interval: 0,
+    timeout: 15000,
+    deviceName: '',
+    containName: ''
+  }) {
     return this._bt.scanDevice(options);
   }
 
@@ -69,7 +68,7 @@ export class BTManager {
    * 
    *  @discussion 停止扫描，取消超时延时。
    */
-  stopScan() {
+  stopScan () {
     return this._bt.stopScan();
   }
 
@@ -84,7 +83,7 @@ export class BTManager {
    *  @discussion 连接指定的外设，需要传入外设对象。
    *              注意实现返回对象的then和catch方法，监听接口是否调用成功。
    */
-  connect(device , timeout) {
+  connect (device, timeout) {
     if (!device) throw new Error('device is undefiend');
     return this._bt.connect(device);
   }
@@ -94,7 +93,7 @@ export class BTManager {
    * 
    *  @return Promise对象
    */
-  disconnect() {
+  disconnect () {
     return this._bt.disconnect();
   }
 
@@ -109,11 +108,10 @@ export class BTManager {
    * 
    *  @discussion 读某个服务下的某个特征值。
    */
-  read(params = {
-        suuid: '',
-        cuuid: ''
-      }) 
-  {
+  read (params = {
+    suuid: '',
+    cuuid: ''
+  }) {
     return this._bt.read(params);
   }
 
@@ -129,12 +127,11 @@ export class BTManager {
    * 
    *  @discussion 向蓝牙模块写入数据。
    */
-  write(params = {
-          suuid: '',
-          cuuid: '',
-          value: ''
-       })
-  {
+  write (params = {
+    suuid: '',
+    cuuid: '',
+    value: ''
+  }) {
     return this._bt.write(params);
   }
 
@@ -150,12 +147,11 @@ export class BTManager {
    * 
    *  @discussion 监听某个特征值变化。
    */
-  notify(params = {
-          suuid: '',
-          cuuid: '',
-          state: true,
-        }) 
-  {
+  notify (params = {
+    suuid: '',
+    cuuid: '',
+    state: true,
+  }) {
     return this._bt.notify(params);
   }
 
@@ -166,7 +162,7 @@ export class BTManager {
    * 
    *  @discussion 连接状态发生改变时，回调此方法。
    */
-  registerDidUpdateConnectStatus(cb) {
+  registerDidUpdateConnectStatus (cb) {
     if (typeof cb !== 'function') throw new TypeError('connectStatus callback expect function');
     this._bt.registerDidUpdateConnectStatus(cb);
   }
@@ -178,7 +174,7 @@ export class BTManager {
    * 
    *  @discussion 当扫描到设备时回调，或者达到超时时间回调。
    */
-  registerDidDiscoverDevice(cb) {
+  registerDidDiscoverDevice (cb) {
     if (typeof cb !== 'function') throw new TypeError('discoverDevice callback expect function');
     this._bt.registerDidDiscoverDevice(cb);
   }
@@ -190,7 +186,7 @@ export class BTManager {
    * 
    *  @discussion 当监听的特征值改变时回调，或者读特征值时回调。
    */
-  registerDidUpdateValueForCharacteristic(cb) {
+  registerDidUpdateValueForCharacteristic (cb) {
     if (typeof cb !== 'function') throw new TypeError('updateValueForCharacteristic callback expect function');
     this._bt.registerDidUpdateValueForCharacteristic(cb);
   }

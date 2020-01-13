@@ -74,7 +74,7 @@ export default class Bluetooth {
    *   @property {number} interval            上报新设备的间隔，默认为0
    *   @property {number} timeout             扫描超时时间，毫秒。在该时间内未扫描到符合要求的设备，上报超时。默认1500ms，-1表示无限超时
    *   @property {string} deviceName          通过蓝牙名称过滤，需要匹配的设备名称
-   *   @property {string} containName         通过蓝牙名称过滤，需要包含的设备名称
+   *   @property {array string} containName         通过蓝牙名称过滤，需要包含的设备名称
    * 
    *  @return Promise对象
    * 
@@ -129,7 +129,19 @@ export default class Bluetooth {
             let name = device.name || device.deviceName;
             device.name = name;
             if (deviceName && (!name || name !== deviceName)) return;
-            if (containName && (!name || !~name.indexOf(containName))) return;
+            function filterContainName(name, containName){
+              if(containName.constructor===String){
+                return name.indexOf(containName)!==-1
+              }else if(containName.constructor===Array){
+                for (let i = 0; i < containName.length;i++){
+                  if (name.indexOf(containName[i])!==-1){
+                    return true;
+                  }
+                }
+              }
+              return false;
+            }
+            if (containName && (!name || !filterContainName(name, containName))) return;
             // 格式化广播数据
             if (typeof device.advertisData !== 'string') device.advertisData = _.ab2str(device.advertisData);
             // 上报设备
